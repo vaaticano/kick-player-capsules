@@ -1,0 +1,170 @@
+/* =====================================================================
+   Kick · Player control capsules (native version)
+
+   Meant to be integrated directly into the player component: own
+   classes, CSS variables, no !important, no :has().
+   Visually equivalent to kick-capsules-v5.js.
+
+   Expected markup
+   ----------------
+   <div class="kc-controls">                     ← bar (today: .z-controls)
+     <div class="kc-group kc-group--left">
+       <button class="kc-btn">…play…</button>
+       <div class="kc-capsule">…volume…</div>
+       <div class="kc-capsule kc-time">00:47:21</div>
+     </div>
+     <div class="kc-group kc-group--right">
+       <div class="kc-capsule kc-capsule--actions">
+         <button class="kc-btn">…pip…</button>
+         <button class="kc-btn kc-btn--clip">…icon… <span>Clip</span></button>
+         <button class="kc-btn">…cc, theatre, fullscreen, settings…</button>
+       </div>
+     </div>
+   </div>
+
+   Requirements
+   ----------
+   · SVG icons must inherit color (fill: currentColor). Already handled
+     by `.kc-btn svg` below. If an icon ships its own `fill`, remove it.
+   · For an optional "glass" look, add the class .kc-controls--glass.
+     backdrop-filter is OFF by default (see the performance report).
+   ===================================================================== */
+
+/* ---------- 1. Tokens ---------- */
+.kc-controls {
+  --kc-green: #53fc18;                     /* Kick green */
+  --kc-icon-color: #fff;
+
+  --kc-capsule-bg: rgba(0, 0, 0, 0.15);
+  --kc-capsule-bg-hover: rgba(0, 0, 0, 0.28);
+  --kc-capsule-border: rgba(255, 255, 255, 0.08);
+  --kc-capsule-h: 36px;
+  --kc-capsule-px: 10px;
+  --kc-capsule-gap: 2px;
+  --kc-group-gap: 6px;
+
+  --kc-glass-blur: 8px;                    /* only with .kc-controls--glass */
+
+  --kc-bg-dur: 200ms;                      /* capsule background */
+  --kc-color-dur: 150ms;                   /* Clip button color */
+  --kc-clip-dur: 220ms;                    /* Clip button scale */
+  --kc-clip-ease: cubic-bezier(0.34, 1.56, 0.64, 1); /* soft overshoot */
+  --kc-clip-scale: 1.08;                   /* hover */
+  --kc-clip-scale-active: 0.95;            /* pressed */
+
+  color: var(--kc-icon-color);             /* also covers buttons outside capsules (play) */
+}
+
+/* ---------- 2. Groups ---------- */
+.kc-group {
+  display: flex;
+  align-items: center;
+  gap: var(--kc-group-gap);
+}
+
+/* ---------- 3. Capsule ---------- */
+.kc-capsule {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kc-capsule-gap);
+  height: var(--kc-capsule-h);
+  padding: 0 var(--kc-capsule-px);
+  background-color: var(--kc-capsule-bg);
+  border: 1px solid var(--kc-capsule-border);
+  border-radius: 999px;
+  color: var(--kc-icon-color);
+  transition: background-color var(--kc-bg-dur) ease;
+}
+
+.kc-capsule--actions {
+  margin-inline: 4px;
+}
+
+/* Stable width for the timestamp: digits don't resize it every second */
+.kc-time {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 4. Icon button ---------- */
+.kc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 32px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.kc-btn svg {
+  fill: currentColor;
+}
+
+/* Visible focus ring for keyboard users */
+.kc-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: -2px;
+}
+
+/* ---------- 5. Clip button ---------- */
+/* Only `transform` (compositor) and `color` are animated. Nothing that triggers layout. */
+.kc-btn--clip {
+  transform-origin: center;
+  transition:
+    transform var(--kc-clip-dur) var(--kc-clip-ease),
+    color var(--kc-color-dur) ease;
+}
+
+/* Icon and label turn green together: they inherit `color` from the button */
+.kc-btn--clip:focus-visible {
+  color: var(--kc-green);
+}
+
+/* Hover only on devices with a real pointer: avoids "sticky hover" on mobile/tablet */
+@media (hover: hover) and (pointer: fine) {
+  .kc-capsule:hover {
+    background-color: var(--kc-capsule-bg-hover);
+  }
+
+  .kc-btn--clip:hover {
+    color: var(--kc-green);
+    transform: scale(var(--kc-clip-scale));
+  }
+}
+
+/* Pressed state (also gives feedback on touch). Placed after hover on purpose. */
+.kc-btn--clip:active {
+  transform: scale(var(--kc-clip-scale-active));
+  transition:
+    transform 80ms ease,
+    color var(--kc-color-dur) ease;
+}
+
+/* ---------- 6. Optional glass ---------- */
+/* Extra GPU cost on every video frame. Use only if the design calls for it. */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .kc-controls--glass .kc-capsule {
+    -webkit-backdrop-filter: blur(var(--kc-glass-blur));
+    backdrop-filter: blur(var(--kc-glass-blur));
+  }
+}
+
+/* ---------- 7. Reduced motion (keep this last) ---------- */
+/* No animation, but the end state is kept (green + scale). */
+@media (prefers-reduced-motion: reduce) {
+  .kc-capsule,
+  .kc-btn--clip,
+  .kc-btn--clip:active {
+    transition: none;
+  }
+}
