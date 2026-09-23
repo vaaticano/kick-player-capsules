@@ -39,8 +39,7 @@ This repository contains two distinct implementations depending on how you wish 
 <details>
 <summary><b>🔍 Click here to view / copy the full JS script directly</b></summary>
 
-```javascript
-// (function () {
+(function () {
     'use strict';
 
     /* =========================================================
