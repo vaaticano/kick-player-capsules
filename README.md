@@ -36,9 +36,8 @@ This repository contains two distinct implementations depending on how you wish 
   3. Copy the full content of `kick-capsules-v5-en.js`, paste it into the console, and hit `Enter`.
   4. The control bar (`.z-controls`) will immediately update with the enhanced capsule layout, hover states, and Clip button scaling.
 
-### 2. `kick-capsules-native-en.css` (Clean Production CSS)
-- **Purpose:** Production-ready stylesheet for native UI integration in React/Vue components.
-- **Key Technical Details:**
-  - Zero `:has()` selectors or `!important` flags (clean cascade architecture).
-  - Uses scoped CSS Custom Properties (`--kc-green`, `--kc-capsule-bg`, `--kc-clip-dur`, etc.) for instant theme customization.
-  - Fully GPU-optimized: animations target only `transform` and `color` properties to prevent DOM layout reflows.
+<details>
+<summary><b>🔍 Click here to view / copy the full JS script directly</b></summary>
+
+```javascript
+// PEGA AQUÍ TODO EL CÓDIGO DE TU ARCHIVO KICK-CAPSULES-V5-EN.JS
