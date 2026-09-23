@@ -13,6 +13,11 @@ Check out how the new UI animations, capsule layout, and interactive Clip button
 > 💡 *Click the image above to watch the full video preview on YouTube.*
 
 ---
+## 📸 Screenshots & UI Preview
+<img width="1209" height="799" alt="kick com-westcol123s" src="https://github.com/user-attachments/assets/0b862088-cb9f-4e8d-8ead-3a31286dc627" />
+<img width="1209" height="799" alt="kick com-westcol123s3w" src="https://github.com/user-attachments/assets/ab087d6e-e342-4807-bfce-7116466b8733" />
+<img width="1209" height="799" alt="kick com-westcol123s3" src="https://github.com/user-attachments/assets/91b08d43-4a48-4997-8875-96ea6538a0c2" />
+
 
 ## 🚀 Features & Enhancements
 
